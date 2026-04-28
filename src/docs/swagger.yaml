@@ -1,0 +1,195 @@
+openapi: 3.0.3
+info:
+  title: STAREast Commerce API
+  version: 1.0.0
+  description: Simple in-memory API for login and checkout.
+servers:
+  - url: http://localhost:3000
+paths:
+  /login:
+    post:
+      summary: Login and receive a JWT.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authenticated user and token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials.
+  /register:
+    post:
+      summary: Register a user and receive a JWT.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Registered user and token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '409':
+          description: Email already registered.
+  /checkout:
+    post:
+      summary: Checkout with cash or credit card.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutRequest'
+      responses:
+        '200':
+          description: Checkout totals.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutResponse'
+        '400':
+          description: Invalid request.
+        '401':
+          description: Unauthorized.
+  /healthcheck:
+    get:
+      summary: Health check.
+      responses:
+        '200':
+          description: API is running.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: alex@stareast.com
+        password:
+          type: string
+          example: password123
+    RegisterRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: Sam Rivera
+        email:
+          type: string
+          example: sam@stareast.com
+        password:
+          type: string
+          example: password123
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Alex Johnson
+        email:
+          type: string
+          example: alex@stareast.com
+    CheckoutRequest:
+      type: object
+      required:
+        - paymentMethod
+        - items
+      properties:
+        paymentMethod:
+          type: string
+          enum:
+            - cash
+            - credit_card
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckoutItem'
+    CheckoutItem:
+      type: object
+      required:
+        - productId
+      properties:
+        productId:
+          type: integer
+          example: 1
+        quantity:
+          type: integer
+          example: 2
+    CheckoutResponse:
+      type: object
+      properties:
+        userId:
+          type: integer
+        paymentMethod:
+          type: string
+        subtotal:
+          type: number
+        discount:
+          type: number
+        total:
+          type: number
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckoutItemDetails'
+    CheckoutItemDetails:
+      type: object
+      properties:
+        productId:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+        quantity:
+          type: integer
+        lineTotal:
+          type: number
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        time:
+          type: string
+          example: 2026-04-28T09:00:00.000Z

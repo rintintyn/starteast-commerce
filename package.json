@@ -1,0 +1,27 @@
+{
+  "name": "starteast-commerce",
+  "version": "1.0.0",
+  "description": "Simple in-memory e-commerce REST API.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rintintyn/starteast-commerce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rintintyn/starteast-commerce/issues"
+  },
+  "homepage": "https://github.com/rintintyn/starteast-commerce#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  }
+}
