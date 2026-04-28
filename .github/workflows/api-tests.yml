@@ -34,7 +34,7 @@ jobs:
               echo "API is up"
               exit 0
             fi
-            echo "Waiting for API..."
+            echo "Waiting for API..." 
             sleep 2
           done
           echo "API failed to start"
