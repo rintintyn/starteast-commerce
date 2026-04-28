@@ -1,5 +1,5 @@
 const request = require("supertest");
-const { expect } = require("chai");
+let expect;
 
 const API_URL = process.env.API_BASE_URL || "http://localhost:3000";
 
@@ -7,6 +7,7 @@ describe("API path coverage", () => {
   let authToken;
 
   before(async () => {
+    ({ expect } = await import("chai"));
     const res = await request(API_URL)
       .post("/login")
       .set("Content-Type", "application/json")
