@@ -68,4 +68,4 @@ describe("API path coverage", () => {
     expect(res.status).to.equal(200);
     expect(res.body).to.have.property("status", "ok");
   });
-});
+}); 
